@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:gravity="center_vertical"
+android:orientation="vertical"
+android:padding="16dp">
+
+<!-- Username EditText -->
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        style="@style/Widget.Material3.TextInputEditText.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:autofillHints="email"
+        android:hint="@string/register_email_hint"
+        android:inputType="textEmailAddress"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+<!-- Password EditText -->
+    <EditText
+        android:id="@+id/editTextPassword"
+        style="@style/Widget.Material3.TextInputEditText.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:autofillHints="password"
+        android:hint="@string/register_password_hint"
+        android:inputType="textPassword"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+<!-- Login Button -->
+    <EditText
+        android:id="@+id/editTextPasswordAgain"
+        style="@style/Widget.Material3.TextInputEditText.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:autofillHints="password"
+        android:hint="@string/register_password_again_hint"
+        android:inputType="textPassword"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <Button
+        android:id="@+id/buttonRegister"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_700"
+        android:text="@string/register_button"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:rippleColor="@color/white"
+        app:strokeColor="@color/white" />
+
+</LinearLayout>
