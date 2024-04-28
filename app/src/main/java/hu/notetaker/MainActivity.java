@@ -3,11 +3,19 @@ package hu.notetaker;
 import static com.google.android.gms.common.util.CollectionUtils.setOf;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -15,17 +23,39 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import hu.notetaker.databinding.ActivityMainBinding;
+import hu.notetaker.databinding.NavHeaderMainBinding;
+import hu.notetaker.service.UserService;
+import kotlin.collections.SetsKt;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Thread imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hu.notetaker.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+
+        var binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarMain.toolbar);
+
+        var displayMetrics = getResources().getDisplayMetrics();
+        var dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+
+        if (dpWidth >= 600 && dpWidth < 1240) {
+            var openMenuButton = binding.appBarMain.toolbar.findViewById(R.id.open_navbar);
+
+            openMenuButton.setOnClickListener(view -> {
+                binding.drawerLayout.open();
+            });
+        }
 
         binding.appBarMain.fab.setOnClickListener(view -> {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -35,35 +65,82 @@ public class MainActivity extends AppCompatActivity {
         var navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
         var navController = navHostFragment.getNavController();
 
-        var appBarConfiguration = new AppBarConfiguration.Builder(setOf(
-                R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow, R.id.nav_settings))
+        var sideNavItems = SetsKt.setOf(
+                R.id.nav_transform,
+                R.id.nav_reflow,
+                R.id.nav_slideshow,
+                R.id.nav_settings,
+                R.id.nav_logout);
+        var appBarConfiguration = new AppBarConfiguration.Builder(sideNavItems)
                 .setOpenableLayout(binding.drawerLayout)
                 .build();
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         if (binding.navView != null) {
             NavigationUI.setupWithNavController(binding.navView, navController);
+
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
+                logout();
+                return true;
+            });
         }
 
-        appBarConfiguration = new AppBarConfiguration.Builder(setOf(
-                R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow))
+        var bottomNavItems = SetsKt.setOf(
+                R.id.nav_transform,
+                R.id.nav_reflow,
+                R.id.nav_slideshow);
+        var bottomNavigationConfiguration = new AppBarConfiguration.Builder(bottomNavItems)
                 .build();
 
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupActionBarWithNavController(this, navController, bottomNavigationConfiguration);
         if (binding.appBarMain.contentMain.bottomNavView != null) {
             NavigationUI.setupWithNavController(binding.appBarMain.contentMain.bottomNavView, navController);
+        }
+
+        var userOptional = UserService.getUser();
+
+        if (!userOptional.isPresent()) {
+            logout();
+            return;
+        }
+
+        final var navigationView = binding.appBarMain.contentMain.navView != null
+                ? binding.appBarMain.contentMain.navView
+                : binding.navView;
+
+        // Load user data
+        if (navigationView != null) {
+            userOptional.ifPresent(user -> {
+                var navHeaderMainBinding = NavHeaderMainBinding.bind(navigationView.getHeaderView(0));
+
+                navHeaderMainBinding.emailView.setText(user.getEmailAddress());
+
+                imageLoader = new Thread(() -> {
+                    try {
+                        var gravatarUri = new URL(user.getAvatarUrl());
+                        var bitmap = BitmapFactory.decodeStream(gravatarUri.openConnection().getInputStream());
+
+                        Handler mainHandler = new Handler(getBaseContext().getMainLooper());
+
+                        // This is your code
+                        Runnable myRunnable = () -> {
+                            navHeaderMainBinding.imageView.setImageBitmap(bitmap);
+                        };
+                        mainHandler.post(myRunnable);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            });
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         var result = super.onCreateOptionsMenu(menu);
-        // Using findViewById because NavigationView exists in different layout files
-        // between w600dp and w1240dp
         var navView = (NavigationView) findViewById(R.id.nav_view);
         if (navView == null) {
-            // The navigation drawer already has the items including the items in the overflow menu
-            // We only inflate the overflow menu if the navigation drawer isn't visible
             getMenuInflater().inflate(R.menu.overflow, menu);
         }
         return result;
@@ -71,9 +148,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        var navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+
         if (item.getItemId() == R.id.nav_settings) {
-            var navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-            navController.navigate(R.id.nav_settings);
+            handleSettings(navController);
+            return true;
+
+        } else if (item.getItemId() == R.id.nav_logout) {
+            logout();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -83,5 +166,38 @@ public class MainActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         var navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return navController.navigateUp() || super.onSupportNavigateUp();
+    }
+
+    private void handleSettings(NavController navController) {
+        navController.navigate(R.id.nav_settings);
+    }
+
+    private void logout() {
+        var mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+
+        var loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+
+        setResult(Activity.RESULT_OK);
+        finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (imageLoader != null && !imageLoader.isAlive()) {
+            imageLoader.start();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (imageLoader != null && imageLoader.isAlive()) {
+            imageLoader.interrupt();
+        }
     }
 }

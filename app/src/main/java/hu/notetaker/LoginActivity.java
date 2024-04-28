@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends Activity {
@@ -24,12 +25,21 @@ public class LoginActivity extends Activity {
 
         var mAuth = FirebaseAuth.getInstance();
 
+        if (mAuth.getCurrentUser() != null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            this.finish();
+        }
+
         loginButton.setOnClickListener(v -> {
             var emailAddress = email.getText().toString();
             var passwordText = password.getText().toString();
 
             if (emailAddress.isEmpty() || passwordText.isEmpty()) {
-                Toast.makeText(LoginActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                Snackbar.make(v, "Please fill in all fields!", Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(getResources().getColor(com.google.android.material.R.color.design_default_color_error))
+                        .show();
+
                 return;
             }
 
@@ -43,7 +53,9 @@ public class LoginActivity extends Activity {
                         startActivity(intent);
                         this.finish();
                     } else {
-                        Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(v, "Login failed!", Snackbar.LENGTH_SHORT)
+                                .setBackgroundTint(getResources().getColor(com.google.android.material.R.color.design_default_color_error))
+                                .show();
                     }
                 });
         });

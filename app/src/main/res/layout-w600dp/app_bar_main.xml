@@ -17,7 +17,16 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.NoteTaker.PopupOverlay" />
+            app:popupTheme="@style/Theme.NoteTaker.AppBarOverlay">
+
+            <Button
+                android:id="@+id/open_navbar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:contentDescription="@string/menu_button"
+                app:icon="@drawable/baseline_menu_24" />
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

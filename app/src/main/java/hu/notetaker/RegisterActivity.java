@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends Activity {
@@ -30,12 +31,17 @@ public class RegisterActivity extends Activity {
             var passwordAgainText = passwordAgain.getText().toString();
 
             if (emailAddress.isEmpty() || passwordText.isEmpty() || passwordAgainText.isEmpty()) {
-                Toast.makeText(RegisterActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                Snackbar.make(v, "Please fill in all fields!", Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(getResources().getColor(com.google.android.material.R.color.design_default_color_error))
+                        .show();
                 return;
             }
 
             if (!passwordText.equals(passwordAgainText)) {
-                Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                Snackbar.make(v, "Passwords do not match!", Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(getResources().getColor(com.google.android.material.R.color.design_default_color_error))
+                        .show();
+
                 return;
             }
 
@@ -45,7 +51,9 @@ public class RegisterActivity extends Activity {
                         Toast.makeText(RegisterActivity.this, "Registration successful! Please log in now.", Toast.LENGTH_LONG).show();
                         this.finish();
                     } else {
-                        Toast.makeText(RegisterActivity.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(v, "Registration failed!", Snackbar.LENGTH_SHORT)
+                                .setBackgroundTint(getResources().getColor(com.google.android.material.R.color.design_default_color_error))
+                                .show();
                     }
                 });
         });

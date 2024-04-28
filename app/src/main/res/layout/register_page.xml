@@ -2,44 +2,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:gravity="center_vertical"
-android:orientation="vertical"
-android:padding="16dp">
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:showDividers="middle"
+    android:divider="@drawable/empty_tall_divider">
 
-<!-- Username EditText -->
-
-    <EditText
-        android:id="@+id/editTextEmail"
-        style="@style/Widget.Material3.TextInputEditText.FilledBox"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:autofillHints="email"
-        android:hint="@string/register_email_hint"
-        android:inputType="textEmailAddress"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:layout_height="wrap_content">
 
-<!-- Password EditText -->
-    <EditText
-        android:id="@+id/editTextPassword"
-        style="@style/Widget.Material3.TextInputEditText.FilledBox"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:autofillHints="password"
-        android:hint="@string/register_password_hint"
-        android:inputType="textPassword"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextEmail"
+            android:autofillHints="email"
+            android:hint="@string/register_email_hint"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
 
-<!-- Login Button -->
-    <EditText
-        android:id="@+id/editTextPasswordAgain"
-        style="@style/Widget.Material3.TextInputEditText.FilledBox"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:autofillHints="password"
-        android:hint="@string/register_password_again_hint"
-        android:inputType="textPassword"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextPassword"
+            android:hint="@string/register_password_hint"
+            android:autofillHints="password"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextPasswordAgain"
+            android:hint="@string/register_password_again_hint"
+            android:autofillHints="password"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/buttonRegister"
