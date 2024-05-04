@@ -3,25 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_transform">
+    app:startDestination="@+id/nav_notes">
 
     <fragment
-        android:id="@+id/nav_transform"
-        android:name="hu.notetaker.ui.transform.TransformFragment"
-        android:label="@string/menu_transform"
-        tools:layout="@layout/fragment_transform" />
+        android:id="@+id/nav_notes"
+        android:name="hu.notetaker.ui.notes.NotesFragment"
+        android:label="@string/menu_notes"
+        tools:layout="@layout/fragment_notes" />
 
     <fragment
-        android:id="@+id/nav_reflow"
-        android:name="hu.notetaker.ui.reflow.ReflowFragment"
-        android:label="@string/menu_reflow"
-        tools:layout="@layout/fragment_reflow" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="hu.notetaker.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_countnotes"
+        android:name="hu.notetaker.ui.countnotes.CountNotesFragment"
+        android:label="@string/menu_countnotes"
+        tools:layout="@layout/fragment_countnotes" />
 
     <fragment
         android:id="@+id/nav_settings"

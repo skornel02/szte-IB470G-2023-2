@@ -7,9 +7,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_transform">Transform</string>
-    <string name="menu_reflow">Reflow</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_notes">Notes</string>
+    <string name="menu_countnotes">Statistics</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_logout">Sign out</string>
 
@@ -54,4 +53,40 @@
         Register
     </string>
 
+    <string name="note_creator_title">
+        Title
+    </string>
+    <string name="note_creator_content">
+        Content
+    </string>
+    <string name="note_creator_alertAt">
+        Alert at
+    </string>
+    <string name="note_creator_set_date">
+        Set date
+    </string>
+    <string name="note_creator_create">
+        Create
+    </string>
+    <string name="note_creator_create_continue">
+        Create and continue
+    </string>
+
+    <string name="notes_finished">
+        Finished
+    </string>
+    <string name="notes_delete">
+        Delete
+    </string>
+
+    <string name="countnotes_text">
+        Total notes count:
+    </string>
+
+    <string name="channel_name">
+        Note notification
+    </string>
+    <string name="channel_description">
+        Notifications about notes
+    </string>
 </resources>

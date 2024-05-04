@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:showDividers="middle"
+    android:divider="@drawable/empty_tall_divider">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextTitle"
+            android:autofillHints="title"
+            android:hint="@string/note_creator_title"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="content"
+            android:hint="@string/note_creator_content"
+            android:inputType="text"
+            android:singleLine="false" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editDateTiemAlertAt"
+            android:hint="@string/note_creator_alertAt"
+            android:autofillHints="alertAt"
+            android:inputType="datetime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:focusable="false"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonNoteDateSet"
+        android:text="@string/note_creator_set_date"
+        />
+
+    <Button
+        android:id="@+id/buttonNoteCreate"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_700"
+        android:text="@string/note_creator_create"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:rippleColor="@color/white"
+        app:strokeColor="@color/white" />
+
+    <Button
+        android:id="@+id/buttonNoteCreateContinue"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:text="@string/note_creator_create_continue"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:rippleColor="@color/white"
+        app:strokeColor="@color/purple_500"
+        app:strokeWidth="5dp" />
+
+</LinearLayout>

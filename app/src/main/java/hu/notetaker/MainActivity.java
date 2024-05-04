@@ -5,28 +5,21 @@ import static com.google.android.gms.common.util.CollectionUtils.setOf;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import hu.notetaker.databinding.ActivityMainBinding;
@@ -37,6 +30,7 @@ import kotlin.collections.SetsKt;
 public class MainActivity extends AppCompatActivity {
 
     private Thread imageLoader;
+    private boolean imageLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,17 +52,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         binding.appBarMain.fab.setOnClickListener(view -> {
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            Intent intent = new Intent(MainActivity.this, CreateNoteActivity.class);
+            startActivity(intent);
         });
 
         var navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
         var navController = navHostFragment.getNavController();
 
         var sideNavItems = SetsKt.setOf(
-                R.id.nav_transform,
-                R.id.nav_reflow,
-                R.id.nav_slideshow,
+                R.id.nav_notes,
+                R.id.nav_countnotes,
                 R.id.nav_settings,
                 R.id.nav_logout);
         var appBarConfiguration = new AppBarConfiguration.Builder(sideNavItems)
@@ -87,9 +80,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         var bottomNavItems = SetsKt.setOf(
-                R.id.nav_transform,
-                R.id.nav_reflow,
-                R.id.nav_slideshow);
+                R.id.nav_notes,
+                R.id.nav_countnotes);
         var bottomNavigationConfiguration = new AppBarConfiguration.Builder(bottomNavItems)
                 .build();
 
@@ -126,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                         // This is your code
                         Runnable myRunnable = () -> {
                             navHeaderMainBinding.imageView.setImageBitmap(bitmap);
+                            imageLoaded = true;
                         };
                         mainHandler.post(myRunnable);
                     } catch (Exception e) {
@@ -187,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if (imageLoader != null && !imageLoader.isAlive()) {
+        if (imageLoader != null && !imageLoader.isAlive() && !imageLoaded) {
             imageLoader.start();
         }
     }
